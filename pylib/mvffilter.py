@@ -810,7 +810,7 @@ def filter_mvf(args):
                     outmvf.sample_data[actionarg[0][0]]['id'] = actionarg[1][0]
                     outmvf.sample_ids[actionarg[0][0]] = actionarg[1][0]
             outmvf.sample_indices = list(range(len(oldindices)))
-    Youtmvf.metadata['ncol'] = len(outmvf.sample_indices)
+    outmvf.metadata['ncol'] = len(outmvf.sample_indices)
     outmvf.notes.append(args.command_string)
     outmvf.write_data(outmvf.get_header())
     args.qprint("Output MVF established.")
