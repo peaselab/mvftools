@@ -175,7 +175,7 @@ class MVFcall():
         args = parser.parse_args(self.arguments[1:])
         mutex_check(args)
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         mvfanalysis.calc_character_count(args)
         return ''
 
@@ -248,7 +248,7 @@ class MVFcall():
         args = parser.parse_args(self.arguments[1:])
         mutex_check(args)
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         mvfanalysis.calc_pairwise_distances(args)
         return ''
 
@@ -301,7 +301,7 @@ class MVFcall():
         args = parser.parse_args(self.arguments[1:])
         mutex_check(args)
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         mvfanalysis.calc_sample_coverage(args)
         return ''
 
@@ -412,7 +412,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         fasta2mvf(args)
         return ''
 
@@ -451,7 +451,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(arguments)
         maf2mvf(args)
         return ''
 
@@ -675,7 +675,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         vcf2mvf(args)
         return ''
 
@@ -719,6 +719,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
+        args.command_string = ' '.join(self.arguments)
         filter_mvf(args)
         return ''
 
@@ -804,7 +805,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         calc_group_unique_allele_window(args)
         return ''
 
@@ -921,7 +922,7 @@ class MVFcall():
         args = parser.parse_args(self.arguments[1:])
         mutex_check(args)
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         infer_window_tree(args)
         return ''
 
@@ -965,7 +966,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         merge_mvf(args)
         return ''
 
@@ -1106,7 +1107,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(args)
+        args.command_string = ' '.join(self.arguments)
         translate_mvf(args)
         return ''
 
