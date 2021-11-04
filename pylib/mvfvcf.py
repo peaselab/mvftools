@@ -254,6 +254,8 @@ class VariantCallFile():
             sample['GT'] = sample['GT'].replace('|', '/')
         if list(sample.values())[0][0] == '.':
             return ('-', 0, 0)
+        if sample.get("DP", None) == '.':
+            return ('-', 0, 0)
         sample_depth = int(sample.get('DP', -1))
         if sample_depth == 0:
             return ('-', 0, 0)
