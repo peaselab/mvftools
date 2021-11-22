@@ -168,6 +168,9 @@ class MVFcall():
             parser.add_argument(
                 "--base-total", "--basetotal",
                 help="String of bases for total (i.e. denominator).")
+            parser.add_argument(
+                "--data-type", "--datatype",
+                choices=("dna", "prot"), default="dna")
             return parser
         parser = generate_argparser()
         if self.selfdoc is True:
@@ -267,6 +270,9 @@ class MVFcall():
             parser.addarg_sample_labels()
             parser.addarg_windowsize()
             parser.addarg_mincoverage()
+            parser.add_argument(
+                "--data-type", "--datatype",
+                choices=("dna", "prot"), default="dna")
             parser.add_argument("--output-lists",
                                 action="store_true")
             return parser
