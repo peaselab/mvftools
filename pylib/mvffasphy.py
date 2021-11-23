@@ -46,7 +46,7 @@ def parse_regions_arg(regionfilepath, contigs):
     contig_ids = [contigs[x]['id'] for x in contigs]
     contig_labels = [contigs[x]['label'] for x in contigs]
     if regionfilepath is None:
-        fmt_regions = dict([x, (x, None, None, None)] for x in contig_ids)
+        fmt_regions = dict([x, [(x, None, None, None)]] for x in contig_ids)
         region_max_coord = dict.fromkeys(contig_ids, None)
     else:
         with open(regionfilepath) as regfile:
