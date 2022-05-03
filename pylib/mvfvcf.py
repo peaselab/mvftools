@@ -298,44 +298,49 @@ class VariantCallFile():
             allele = (alleles[0] if sample['GT'] == '0/0' else alleles[1])
             quality = (-1 if sample.get("GQ", -1) == -1 else sample['GQ'])
         elif len(alleles) <= 4:
-            if sample.get('PL', -1) == -1 and sample.get('GL', -1) != -1:
-                plvalues = [float(x) if x != '.' else -1
-                            for x in sample['GL'].split(',')]
+            quality = (-1 if sample.get("GQ", -1) == -1 else sample['GQ'])
+            if sample.get('GL', -1) == -1 and sample.get('PL', -1) == -1:
+                allele = '{}{}'.format(alleles[int(sample['GT'][0])],
+                                       alleles[int(sample['GT'][2])])
+                allele = MLIB.joinbases[allele]
             else:
-                plvalues = [float(x) if x != '.' else -1
-                            for x in sample['PL'].split(',')]
-            if all(0 <= x <= 1 for x in plvalues) and sum(plvalues) == 1:
-                plvalues = [x == 0 and 1 or x != 1 and
-                            int(-10 * log10(x)) or 0 for x in plvalues]
-            maxpl = max(plvalues) if 0 not in plvalues else 0
-            imaxpl = (-1 if plvalues.count(maxpl) != 1 else
-                      plvalues.index(maxpl))
-            if imaxpl == -1:
-                allele = "X"
-            elif kwargs['ploidy'] > 2:
-                if kwargs['ploidy'] == 4:
+                if sample.get('GL', -1) != -1:
+                    plvalues = [float(x) if x != '.' else -1
+                                for x in sample['GL'].split(',')]
+                elif sample.get('PL', -1) != -1:
+                    plvalues = [float(x) if x != '.' else -1
+                                for x in sample['PL'].split(',')]
+                if all(0 <= x <= 1 for x in plvalues) and sum(plvalues) == 1:
+                    plvalues = [x == 0 and 1 or x != 1 and
+                                int(-10 * log10(x)) or 0 for x in plvalues]
+                maxpl = max(plvalues) if 0 not in plvalues else 0
+                imaxpl = (-1 if plvalues.count(maxpl) != 1 else
+                          plvalues.index(maxpl))
+                if imaxpl == -1:
+                    allele = "X"
+                elif kwargs['ploidy'] > 2:
+                    if kwargs['ploidy'] == 4:
+                        alleles = ''.join(list(set(
+                            alleles[x] for x in MLIB.vcf_gtcodes_tetra[imaxpl])
+                                               - set("-")))
+                    elif kwargs['ploidy'] == 6:
+                        alleles = ''.join(list(set(
+                            alleles[x] for x in MLIB.vcf_gtcodes_hex[imaxpl])
+                                               - set("-")))
+                    else:
+                        raise RuntimeError("Ploidy is not 2, 4 or 6")
+                    if alleles == "":
+                        allele = "-"
+                    else:
+                        allele = MLIB.joinbasespoly[alleles]
+                else:
                     alleles = ''.join(list(set(
-                        alleles[x] for x in MLIB.vcf_gtcodes_tetra[imaxpl])
+                        alleles[x] for x in MLIB.vcf_gtcodes[imaxpl])
                                            - set("-")))
-                elif kwargs['ploidy'] == 6:
-                    alleles = ''.join(list(set(
-                        alleles[x] for x in MLIB.vcf_gtcodes_hex[imaxpl])
-                                           - set("-")))
-                else:
-                    raise RuntimeError("Ploidy is not 2, 4 or 6")
-                if alleles == "":
-                    allele = "-"
-                else:
-                    allele = MLIB.joinbasespoly[alleles]
-            else:
-                alleles = ''.join(list(set(
-                    alleles[x] for x in MLIB.vcf_gtcodes[imaxpl])
-                                       - set("-")))
-                if alleles == "":
-                    allele = "-"
-                else:
-                    allele = MLIB.joinbases[alleles]
-            quality = sample['GQ'] if sample.get('GQ', -1) != -1 else -1
+                    if alleles == "":
+                        allele = "-"
+                    else:
+                        allele = MLIB.joinbases[alleles]
         else:
             # Fail-safe check (you should never see a ! in the MVF output)
             allele = '!'

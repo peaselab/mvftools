@@ -107,7 +107,7 @@ class MVFcall():
             epilog=_LICENSE)
         parser.add_argument("command", help="MVFtools command to run")
         parser.add_argument("--version", action="version",
-                            version="0.6.2",
+                            version="0.6.2.1",
                             help="display version information")
         args = parser.parse_args(self.arguments[:1])
         if args.command in OLDCOMMAND:
@@ -457,7 +457,7 @@ class MVFcall():
             return parser
         args = parser.parse_args(self.arguments[1:])
         args.qprint = make_qprint(args.quiet, self.time0)
-        args.command_string = ' '.join(arguments)
+        args.command_string = ' '.join(self.arguments)
         maf2mvf(args)
         return ''
 
@@ -882,7 +882,7 @@ class MVFcall():
                 "--bootstrap", type=int,
                 help=("turn on rapid bootstrapping for RAxML and "
                       "perform specified number of replicates"))
-            parser.add_argument("--engine", 
+            parser.add_argument("--engine",
                                 choices=("raxml", "raxml-ng"),
                                 default="raxml-ng",
                                 help=("Choose a phylogenetic inference "
@@ -900,8 +900,8 @@ class MVFcall():
                 help=("manually specify the path "
                       "of the phylogenetic engine."))
             parser.add_argument(
-                "--engine-opts", "--engineopts", 
-                "--raxml-opts", "--raxmlopts", 
+                "--engine-opts", "--engineopts",
+                "--raxml-opts", "--raxmlopts",
                 default="",
                 help=("specify additional RAxML arguments as a "
                       "double-quotes encased string"))
