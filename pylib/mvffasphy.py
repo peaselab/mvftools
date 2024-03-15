@@ -389,7 +389,7 @@ def fasta2mvf(args):
         mvf.sample_data[i]= {'id': label}
     mvf.metadata['ncol'] = len(mvf.metadata['labels'])
     mvf.metadata['sourceformat'] = 'fasta'
-    mvf.metadata.append(args.command_string)
+    mvf.metadata['command'] = '" {} "'.format(' '.join(args.command_string))
     mvf.flavor = args.flavor
     # WRITE MVF HEADER
     mvf.write_data(mvf.get_header())
