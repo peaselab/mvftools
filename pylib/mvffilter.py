@@ -306,6 +306,8 @@ def make_module(modulename, ncol, optargs=None):
             return entry.upper()
         if mvfenc == 'onevar':
             if entry[1].upper() == entry[3].upper():
+                if entry[0].upper() == entry[1].upper():
+                    return entry[0]
                 return entry[0:2].upper()
             return entry.upper()
         return entry.upper()
