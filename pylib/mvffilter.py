@@ -94,9 +94,13 @@ def make_module(modulename, ncol, optargs=None):
            for heterozygous alleles"""
         if mvfenc == 'full':
             newbase = MLIB.merge_bases([entry[x] for x in optargs[0]])
-            return ''.join([(j == optargs[0][0] and newbase) or
-                            (j not in optargs[0] and entry[j]) or
-                            '' for j in range(len(entry))])
+            newstring = ''.join(
+                [newbase if j == optargs[0][0] else (
+                    entry[j] if j not in optargs[0] else '') for
+                    j in range(len(entry))])
+            if len(newstring) == 2 and newstring[0] == newstring[1]:
+                return newstring[0]
+            return newstring
         if mvfenc == 'invar':
             return entry
         if mvfenc == 'onecov':
@@ -125,7 +129,7 @@ def make_module(modulename, ncol, optargs=None):
                     optargs[0][0])
             else:
                 entry = "{}{}".format(
-                    entry[:4], 
+                    entry[:4],
                     num - len([x for x in optargs[0] if x < num]))
             return entry
         if mvfenc == 'refvar':
@@ -325,7 +329,7 @@ def make_module(modulename, ncol, optargs=None):
                     if x in MLIB.validchars['dnaambig23']
                     else x
                 )
-                    for x in entry
+                for x in entry
             )
         if mvfenc == 'refvar':
             return '{}{}'.format(
@@ -696,7 +700,7 @@ def filter_mvf(args):
                 arr[1] = ','.join([
                     str(mvf.sample_id_to_index[x])
                     for x in arr[1].split(',')])
-            if arr[0] in ('columns', 'allelegroup', 
+            if arr[0] in ('columns', 'allelegroup',
                           'notmultigroup', 'reqsample'):
                 for j in range(1, len(arr)):
                     arr[j] = ','.join([
@@ -715,15 +719,15 @@ def filter_mvf(args):
             removed_columns.update([int(x) for x in tmp_arr.split(',')[1:]])
             print(arr)
             print(removed_columns)
-        if arr[0] in ('columns', 'allelegroup', 
+        if arr[0] in ('columns', 'allelegroup',
                       'notmultigroup', 'reqsample'):
             for j in range(1, len(arr)):
                 arr[j] = ','.join([
-                    str(int(x) - len([y for y in removed_columns if y < int(x)]))
+                    str(int(x) - len([y for y in removed_columns
+                                      if y < int(x)]))
                     for x in arr[j].split(',')])
         args.actions[i] = ':'.join(arr)
-            
-            
+
     actionset = build_actionset(args.actions, ncol)
     args.qprint("Actions established.")
     args.qprint(actionset)
@@ -799,7 +803,7 @@ def filter_mvf(args):
                     oldindices = [int(x) for x in actionarg[0]]
             elif actionname in ('collapsepriority', 'collapsemerge'):
                 actionarg[0] = [x - len([y for y in removed_indices if y < x])
-                                 for x in actionarg[0]]
+                                for x in actionarg[0]]
                 oldindices = [x for x in outmvf.sample_indices
                               if x not in actionarg[0][1:]]
             outmvf.sample_ids = outmvf.get_sample_ids(oldindices)
