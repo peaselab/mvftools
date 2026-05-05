@@ -4,7 +4,7 @@
 
 ## Authors
 
-* James B. Pease (website: http://www.peaselab.org ([@jamesbpease](https://twitter.com/jamesbpease/))
+* James B. Pease (website: http://u.osu.edu/peaselab
 * Ben K. Rosenzweig
 
 ### Contributors
@@ -18,7 +18,7 @@ Multisample Variant Format (MVF), which is designed for compact storage and effi
 
 Pease JB and BK Rosenzweig. 2018. "Encoding Data Using Biological Principles: the Multisample Variant Format for Phylogenomics and Population Genomics" *IEEE/ACM Transactions on Computational Biology and Bioinformatics*. 15(4):1231-1238.  http://www.dx.doi.org/10.1109/tcbb.2015.2509997
 
-Please also include the URL https://www.github.com/jbpease/mvftools in your methods section where the program is referenced.
+Please also include the URL https://www.github.com/peaselab/mvftools in your methods section where the program is referenced.
 
 (Note this paper was originally published online in 2015, but did not receive final citation page numbering until 2018.  You may see older citations as 2015, which is the same paper.)
 
@@ -51,15 +51,17 @@ For questions, contact James Pease by email (info at http://www.peaselab.org)
 
 ## Examples of papers that have used MVFtools
 
-* http://dx.doi.org/10.1111/mec.13679
-* http://dx.doi.org/10.1111/mec.13610
-* http://dx.doi.org/10.1371/journal.pbio.1002379
+* https://dx.doi.org/s41467-018-04963-6
+* https://dx.doi.org/S0960-9822(24)01379-4
+* https://dx.doi.org/10.1073/pnas.2119671119
+* https://dx.doi.org/10.1111/mec.13679
+* https://dx.doi.org/10.1111/mec.13610
+* https://dx.doi.org/10.1371/journal.pbio.1002379
 * https://doi.org/10.1038/s41467-018-04963-6
 * https://doi.org/10.1093/gbe/evy227
 * https://doi.org/10.1093/molbev/msy198
 * https://doi.org/10.1534/genetics.118.301831
 * https://doi.org/10.1111/mec.14877
-* https://doi.org/10.1186/s13059-018-1471-8
 * https://doi.org/10.1093/molbev/msaa148
 
 
