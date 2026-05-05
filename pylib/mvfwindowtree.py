@@ -466,7 +466,6 @@ def ladderize_alpha_tree(treestring, prune=None, rootwith=None,
                 x.name for x in c.get_terminals()])[0])
         else:
             node.clades.sort(key=lambda c: c.name)
-    tree0.ladderize()
     if rootwith:
         if len(rootwith) == 1:
             for node in tree0.get_terminals():
@@ -478,6 +477,7 @@ def ladderize_alpha_tree(treestring, prune=None, rootwith=None,
                         in node.get_terminals()]):
                     tree0.root_with_outgroup(node)
                     break
+    tree0.ladderize()
     tree_string = tree0.__format__('newick').replace(
         ':1.00000', '').replace(":0.00000", "").rstrip()
     return tree_string
