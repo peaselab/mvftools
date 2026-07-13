@@ -448,6 +448,32 @@ def make_module(modulename, ncol, optargs=None):
             return all([x in (entry[0], entry[1], entry[3])
                         for x in optargs[0]])
         return False
+    
+    # REQBIALLELICSTRICT
+    def reqbiallelicstrict(entry, mvfenc):
+        """only retain invariant or biallelic DNA sites, 
+           exclude lines with ambiguity codes
+        """
+        entry = entry.upper()
+        if mvfenc == 'full':
+            return (all(x in MLIB.validchars['dna'] + '-' for x in entry) and
+                    len(set(entry)) < 3)
+            return False
+        if mvfenc == 'invar':
+            return (entry[0] in 'ATGC-')
+        if mvfenc == 'onecov':
+            return (len(set([entry[0], entry[2]]) - {'-'}) < 3 and
+                    all(entry[x] not in MLIB.validchars['dnaambigall'] 
+                        for x in (0, 2)))
+        if mvfenc == 'onevar':
+            return (len(set([entry[0], entry[1], entry[2]]) - {'-'}) < 3 and
+                    all(entry[x] not in MLIB.validchars['dnaambigall'] 
+                        for x in (0, 1, 2)))
+        if mvfenc == 'refvar':
+            return (len(set([entry[0], entry[1]]) - {'-'} ) < 3 and 
+                    all(entry[x] not in MLIB.validchars['dnaambigall'] 
+                        for x in (0, 1)))
+        return False
 
     # REQCONTIG
     def reqcontig(entry):
@@ -582,6 +608,7 @@ def make_module(modulename, ncol, optargs=None):
         'removechar': ('transform', removechar),
         'removelower': ('transform', removelower),
         'reqallchar': ('filter', reqallchar),
+        'reqbiallelicstrict': ('filter', reqbiallelicstrict),
         'reqcontig': ('location', reqcontig),
         'reqinformative': ('filter', reqinformative),
         'reqinvariant': ('filter', reqinvariant),

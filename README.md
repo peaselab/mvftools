@@ -4,10 +4,11 @@
 
 ## Authors
 
-* James B. Pease (website: http://u.osu.edu/peaselab
+* James B. Pease (https://u.osu.edu/peaselab
 * Ben K. Rosenzweig
 
 ### Contributors
+* Anri Chomentowska
 * Roddra Johnson
 * Ellen Weinheimer
 
@@ -47,7 +48,7 @@ raxml/index.html
 
 ## FAQ and Questions/Comments
 See the manual for Frequently Asked Questions and other discussion commentary.
-For questions, contact James Pease by email (info at http://www.peaselab.org)
+For questions, contact James Pease by email (info at https://u.osu.edu/peaselab)
 
 ## Examples of papers that have used MVFtools
 

@@ -65,7 +65,7 @@ def verify_mvf(args):
     """Main method"""
     args.qprint("Running VerifyMVF")
     mvf = MultiVariantFile(args.mvf, 'read')
-    contigs = mvf.metadata['contigs']
+    contigs = mvf.contig_ids
     ncol = mvf.metadata['ncol']
     previous_location = (None, None)
     if mvf.metadata['mvftype'] in ('dna', 'protein'):
@@ -124,7 +124,7 @@ def verify_mvf(args):
             #  CHECK POSITION
             if contigid not in contigs:
                 errmsg.append("invalid contigid")
-            elif pos > contigs[contigid]['length']:
+            elif pos > mvf.contig_data[mvf.contig_id_to_index[contigid]]['length']:
                 errmsg.append("invalid position on contig")
             elif contigid != previous_location[0]:
                 previous_location = (contigid, pos)

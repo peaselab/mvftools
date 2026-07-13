@@ -1132,6 +1132,7 @@ class MVFcall():
         if self.selfdoc is True:
             return parser
         args = parser.parse_args(self.arguments[1:])
+        args.qprint = make_qprint(args.quiet, self.time0)
         verify_mvf(args)
         return ''
 
