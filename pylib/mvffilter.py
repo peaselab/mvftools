@@ -107,8 +107,9 @@ def make_module(modulename, ncol, optargs=None):
             num = int(entry[3:])
             if optargs[0][0] == 0 and num in optargs[0]:
                 return ''
-            return "{}{}".format(entry[0:3], num - len([
-                x for x in optargs[0] if x < num]))
+            return "{}{}".format(
+                entry[0:3], 
+                num - sum([x < num for x in optargs[0]]))
         if mvfenc == 'onevar':
             num = int(entry[4:])
             if optargs[0][0] == 0:
@@ -130,7 +131,7 @@ def make_module(modulename, ncol, optargs=None):
             else:
                 entry = "{}{}".format(
                     entry[:4],
-                    num - len([x for x in optargs[0] if x < num]))
+                    num - sum([x < num for x in optargs[0]]))
             return entry
         if mvfenc == 'refvar':
             if optargs[0][0] == 0:
@@ -154,16 +155,18 @@ def make_module(modulename, ncol, optargs=None):
             num = int(entry[3:])
             if optargs[0][0] == 0 and num in optargs[0]:
                 return ''
-            return "{}{}".format(entry[0:3], num - len([
-                x for x in optargs[0] if x < num]))
+            return "{}{}".format(
+                entry[0:3], 
+                num - sum([x < num for x in optargs[0]]))
         if mvfenc == 'onevar':
             num = int(entry[4:])
             if optargs[0][0] == 0:
                 if num in optargs[0]:
                     entry = entry[0:1]
             elif optargs[0][0] == num:
-                entry = "{}{}".format(entry[0:4], num - len([
-                    x for x in optargs[0] if x < num]))
+                entry = "{}{}".format(
+                    entry[0:4], 
+                    num - sum([x < num for x in optargs[0]]))
             elif num in optargs[0]:
                 entry = entry[0:2]
             return entry
@@ -190,7 +193,7 @@ def make_module(modulename, ncol, optargs=None):
             if list(sorted(optargs[0])) == [0, num]:
                 return '{}{}'.format(entry[0], entry[2])
             return '{}{}'.format(entry[0:3],
-                                 len([x < num for x in optargs[0]]))
+                                 sum([x < num for x in optargs[0]]))
         if mvfenc == 'onevar':
             if optargs[0] == [0]:
                 return entry[0]
@@ -202,8 +205,9 @@ def make_module(modulename, ncol, optargs=None):
                 return entry[0:2]
             if list(sorted(optargs[0])) == [0, num]:
                 return '{}{}'.format(entry[0], entry[3])
-            return '{}{}'.format(entry[0:4],
-                                 len([x < num for x in optargs[0]]))
+            return '{}{}'.format(
+                entry[0:4],
+                sum([x < num for x in optargs[0]]))
         if mvfenc == 'refvar':
             if optargs[0] == [0]:
                 return entry[0]
