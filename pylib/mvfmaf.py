@@ -64,16 +64,21 @@ class MultiAlignFile(object):
 
     def __init__(self, args):
         self.path = os.path.abspath(args.maf)
-        self.ref = args.ref_tag
+        if args.label_delim is not None:
+            self.ref = args.ref_tag.split(args.label_delim)[0]
+        else:
+            self.ref = args.ref_tag
         self.metadata = {'sourceformat': 'MAF'}
         self.metadata['labels'] = set()
         self.entrystart = 0
         # Check for Gzip and establish file object
-        self.metadata['isgzip'] = (self.path.endswith(".gz") or
-                                   args.get('isgzip', False))
+        self.metadata['isgzip'] = bool(self.path.endswith(".gz"))
         # READ MODE
-        filehandler = (self.metadata['isgzip'] and
-                       gzip.open(self.path, 'rt') or open(self.path, 'rt'))
+        filehandler = (
+            gzip.open(self.path, 'rt') 
+            if self.metadata['isgzip']
+            else open(self.path, 'rt')
+        )
         # Process header lines
         line = filehandler.readline()
         if line.startswith("##maf"):
@@ -141,20 +146,33 @@ def maf2mvf(args):
     mvf = MultiVariantFile(args.out, 'write', overwrite=args.overwrite)
     args.qprint("MVF output initialized")
     # PROCESS SAMPLE INFO
-    contig_translate = {1: 1}
-    samplelabels = [s.split(':')[0] for s in args.sample_tags.split(',')]
+    contig_id = int(args.contig_id) if args.contig_id is not None else 0
+    contig_label = args.contig_label if args.contig_label else "chr0"
+    contig_length = args.contig_length if args.contig_length else 1000000000
+    if args.label_delim is not None:
+        samplelabels = [s.split(args.label_delim)[0] for s in args.sample_tags.split(',')]
+        reflabel = args.ref_tag.split(args.label_delim)[0]
+    else:
+        samplelabels = [s for s in args.sample_tags.split(',')]
+        reflabel = args.ref_tag[:]
     args.qprint("Sample tags processed: {}".format(samplelabels))
-    if args.ref_tag not in samplelabels:
+    if reflabel not in samplelabels:
         raise IndexError("--ref-tag not in the tags listed in --sample-tags")
-    samplelabels.remove(args.ref_tag)
-    samplelabels.insert(0, args.ref_tag)
+    samplelabels.remove(reflabel)
+    samplelabels.insert(0, reflabel)
+    mvf.contig_indices = [0, ]
+    mvf.contig_ids = [contig_id, ]
+    mvf.contig_id_to_index = {contig_id: 0}
+    mvf.contig_labels = [contig_label, ]
+    mvf.contig_labels_to_index = {contig_label: 0}
+    mvf.contig_data = {0: {"id": contig_id, "label": contig_label, "length": contig_length}}
     mvf.sample_ids = samplelabels[:]
     mvf.sample_indices = list(range(len(mvf.sample_ids)))
     for i, label in enumerate(samplelabels):
         mvf.sample_data[i] = {'id': label, 'index': i}
     mvf.reset_max_sample()
     mvf.metadata['sourceformat'] = maf.metadata['sourceformat']
-    mvf.metadata.notes.append(args.command_string)
+    mvf.notes.append(args.command_string)
     # WRITE MVF HEADER
     mvf.write_data(mvf.get_header())
     args.qprint("MAF Headers Written")
@@ -165,15 +183,18 @@ def maf2mvf(args):
     for pos, length, msa in maf:
         for sname in samplelabels:
             if sname not in msa:
-                msa[sname] = '-'*length
+                msa[sname] = '-' * length
         msa['contig'] = 1
         for i in range(length):
             mvf_alleles = encode_mvfstring(
                 ''.join(msa[s][i].strip() for s in samplelabels))
             if mvf_alleles:
                 mvfentries.append(
-                    (contig_translate.get(msa['contig']),
-                     pos+i, (mvf_alleles,)))
+                    (contig_id, 
+                     pos+i, 
+                     (mvf_alleles,)
+                     )
+                )
                 nentry += 1
                 if nentry == args.line_buffer:
                     total_entries += nentry

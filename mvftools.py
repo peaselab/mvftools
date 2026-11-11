@@ -449,6 +449,18 @@ class MVFcall():
             parser.add_argument(
                 "--mvf-ref-label", "--mvfreflabel", default="REF",
                 help=("new label for reference sample (default='REF')"))
+            parser.add_argument(
+                "--label-delim", "--labeldelim",
+                help=("shorten labels to before this first delimiter."))
+            parser.add_argument(
+                "--contig-label", "--contiglabel", default="chr0",
+                help=("name for the contig"))
+            parser.add_argument(
+                "--contig-id", "--contigid", type=int, default=1,
+                help=("manually specify a numeric id for the contig."))
+            parser.add_argument(
+                "--contig-length", "--contiglength", type=int, default=1000000000,
+                help=("manually specify a numeric length for the contig."))
             parser.addarg_linebuffer()
             parser.addarg_overwrite()
             return parser
@@ -832,6 +844,9 @@ class MVFcall():
             parser.addarg_contig_labels()
             parser.addarg_windowsize()
             parser.add_argument(
+                "--verbose", action="store_true",
+                help="additional screen output")
+            parser.add_argument(
                 "--raxml-outgroups", "--raxmloutgroups",
                 help=("Comma-separated list of outgroup "
                       "taxon labels to use in RAxML."))
@@ -903,7 +918,7 @@ class MVFcall():
                 "--engine-opts", "--engineopts",
                 "--raxml-opts", "--raxmlopts",
                 default="",
-                help=("specify additional RAxML arguments as a "
+                help=("specify additional engine arguments as a "
                       "double-quotes encased string"))
             parser.add_argument(
                 "--duplicate-seq", "--duplicateseq", default="dontuse",

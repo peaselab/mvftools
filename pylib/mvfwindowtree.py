@@ -366,11 +366,11 @@ class OutputFile():
         return ''
 
 
-def verify_raxml(params):
-    """verify raxml path"""
+def verify_engine(params):
+    """verify engine path"""
     try:
         out = str(subprocess.check_output([params['engine_path'], "-v"]))
-        if out.find("RAxML") == -1:
+        if out.find(params['engine_path']) == -1:
             raise RuntimeError("Program not found at path:{}\n{}".format(
                 params['engine_path'], out))
     except FileNotFoundError:
@@ -420,8 +420,8 @@ def run_raxml_ng(filename, jobname, params):
     """Runs RAxML-ng
         Parameters:
             filename: temporary phy filepath
-            jobname: unique jobid for RAxML
-            engine_path: path to RAxML program (default=raxmlHPC)
+            jobname: unique jobid for RAxML-ng
+            engine_path: path to RAxML-ng program (default=raxml-ng)
             bootstrap: int bootstrap replicates (default=none)
             opts: any additional options (as a string)
     """
@@ -579,15 +579,15 @@ def infer_window_tree(args):
         elif params['engine'] == 'raxml-ng':
             params['model'] = "GTR+G"
     # WINDOW START INTERATION
-    verify_raxml(params)
-    args.qprint("RAxML Found.")
+    verify_engine(params)
+    args.qprint(f"{args.engine_path} Found.")
     current_contig = None
     current_position = 0
     window_data = None
     # skip_contig = False
     topo_ids = {}
     topo_counts = {}
-    args.qprint("Prcocessing Records")
+    args.qprint("Processing Records")
     windowsizename = "window size={}".format(args.windowsize)
     if windowsizename == "window size=-1":
         windowsizename = "whole contig"
